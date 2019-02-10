@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
     desc = fh.read()
     long_description = desc[desc.find("# tt_demo"):]  # remove bagde
 
-with open("tt_demo/requirements.txt", "r") as fh:
+with open("requirements.txt", "r") as fh:
     install_requires = fh.read().splitlines()
 
 setuptools.setup(
