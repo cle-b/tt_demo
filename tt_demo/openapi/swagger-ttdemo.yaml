@@ -8,7 +8,7 @@ paths:
   /queries:
     post:
       summary: Extract the queries from a CSON configuration file.
-      operationId: queries.create_queries_from_cson
+      operationId: tt_demo.create_queries_from_cson
       tags:
         - queries
       requestBody:
