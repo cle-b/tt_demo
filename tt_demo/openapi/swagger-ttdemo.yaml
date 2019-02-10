@@ -1,0 +1,47 @@
+openapi: "3.0.0"
+info:
+  version: 0.0.1
+  title: My Toucan Toco demo project
+  license:
+    name: Apache-2.0
+paths:
+  /queries:
+    post:
+      summary: Extract the queries from a CSON configuration file.
+      operationId: queries.create_queries_from_cson
+      tags:
+        - queries
+      requestBody:
+        description: Create a new item
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: The CSON configuration file with query ids instead of descriptions.
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
