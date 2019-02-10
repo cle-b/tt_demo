@@ -1,4 +1,6 @@
 pytest
+coverage
+tox
 cson
 flask
 connexion[swagger-ui]
