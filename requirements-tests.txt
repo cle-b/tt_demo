@@ -6,3 +6,4 @@ flask
 connexion[swagger-ui]
 flask_pymongo
 pep8
+codecov
