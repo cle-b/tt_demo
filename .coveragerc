@@ -1,0 +1,6 @@
+[run]
+source =
+    tt_demo
+
+[report]
+omit = */tests/*
