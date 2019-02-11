@@ -3,3 +3,8 @@
     domain: "test_domain"
     my_key: "{{ my_filter }}"
 ]
+another:
+  dict:
+    query:
+        abc: "demo"
+        def: 13

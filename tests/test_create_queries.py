@@ -24,8 +24,9 @@ def test_create_queries_return_safe_config(client):
     except Exception as ex:
         assert False, "The response is not a correct CSON file (%s)" % str(ex)
 
-    # the query has been replaced by its md5 checksum
+    # each query has been replaced by its md5 checksum
     assert safe_config["settings"][0]["query"] == 'dbee8e5efef34bed71d5db632c3938b1'
+    assert safe_config["another"]["dict"]["query"] == '120f098643762d0bfa38f2c9816dcc7b'
 
 
 def test_create_queries_with_malformed_config_file(client):
