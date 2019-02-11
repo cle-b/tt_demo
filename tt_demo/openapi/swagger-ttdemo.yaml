@@ -12,7 +12,7 @@ paths:
       tags:
         - queries
       requestBody:
-        description: Create a new item
+        description: A CSON configuration file
         required: true
         content:
           application/octet-stream:

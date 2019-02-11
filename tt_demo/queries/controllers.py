@@ -8,7 +8,8 @@ from pymongo import UpdateOne
 
 
 def search_and_replace_queries(config):
-    """Search an replace all query descriptions by a name in the configuration dictionary.
+    """Search and replace all query descriptions by a key (its checksum) in the
+       configuration dictionary.
 
         When a query description is found, we:
             * stringify it
@@ -17,7 +18,7 @@ def search_and_replace_queries(config):
             * return the pair (checksum, str_description)
 
     Args:
-        config: A configuration dictionary where query descriptions are still present.
+        config: A configuration dictionary with query descriptions.
 
     Returns:
         The pair (checksum, str_description)
@@ -57,11 +58,13 @@ def create_queries(cson_content, db):
 
     queries = list(search_and_replace_queries(config))  # walks through config recursively
 
-    # insert all the queries using in a bulk command for better performance.
+    # insert all the queries using a bulk command for better performance.
     # insert a query only if not exists
     # using the checksum as key in order to avoid at least two problems:
     #       * key collision
     #       * query duplication
+    # in case of performance issue, change document like this
+    # {"name": checksum, "description": str_description} and an index for "name"
     db.myqueries.bulk_write([UpdateOne({checksum: {"$exists": True}},
                                        {"$set": {checksum: str_description}},
                                        upsert=True) for (checksum, str_description) in queries])
