@@ -6,9 +6,6 @@ with open("README.md", "r") as fh:
     desc = fh.read()
     long_description = desc[desc.find("# tt_demo"):]  # remove bagde
 
-with open("requirements.txt", "r") as fh:
-    install_requires = fh.read().splitlines()
-
 setuptools.setup(
     name="tt_demo",
     version="0.0.1",
@@ -21,7 +18,10 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     include_package_data=True,
     python_requires=">=3.6",
-    install_requires=install_requires,
+    install_requires=["cson",
+                      "flask",
+                      "connexion[swagger-ui]",
+                      "flask_pymongo"],
     classifiers=[
         "Programming Language :: Python :: 3",
         'License :: OSI Approved :: Apache Software License'
