@@ -1,0 +1,5 @@
+﻿settings:[
+  query:
+    domain: "test_domain"
+    my_key: "{{ my_filter }}"
+]

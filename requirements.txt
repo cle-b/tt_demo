@@ -1,0 +1,4 @@
+cson
+flask
+connexion[swagger-ui]
+flask_pymongo
