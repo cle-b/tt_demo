@@ -7,7 +7,7 @@ services:
 
 before_install:
   - docker pull toucantoco/backtechtest
-  - docker run --rm -i -p 27017:27017 toucantoco/backtechtest
+  - docker run -d --rm -i -p 27017:27017 toucantoco/backtechtest
   
 matrix:
   include:
