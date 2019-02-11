@@ -17,11 +17,8 @@ matrix:
       env: TOX_ENV=py37
 
 install:
-- pip install tox
+- pip install -r requirements-tests.txt
 script: tox -e $TOX_ENV
-after_success:
-- pip install coveralls
-- coveralls
 
 # Push the results back to codecov
 after_success:
