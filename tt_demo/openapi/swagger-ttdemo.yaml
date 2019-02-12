@@ -7,7 +7,7 @@ info:
 paths:
   /queries:
     post:
-      summary: Extract the queries from a CSON configuration file.
+      summary: Create the queries from a CSON configuration file and return a safe CSON
       operationId: tt_demo.create_queries_from_cson
       tags:
         - queries
@@ -61,7 +61,7 @@ paths:
         - name: query_id
           in: path
           required: true
-          description: The id of the query to retreive
+          description: The id of the query to retrieve
           schema:
             $ref: "#/components/schemas/QueryID"
       responses:
@@ -77,11 +77,45 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /mycoll/query:
+    post:
+      summary: Get mycoll data 
+      operationId: tt_demo.query
+      tags:
+        - mycoll
+      parameters:
+        - name: id
+          in: query
+          required: true
+          description: The id of the query to execute
+          schema:
+            $ref: "#/components/schemas/QueryID"
+      requestBody:
+        description: A filter
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryFilter'            
+      responses:
+        '200':
+          description: The result of the query
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QueryResult"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
     QueryID:
       type: string
       readOnly: true
+      example: "61dbb89ca5de54506143f3a7a07c2763"
     Query:
       required:
         - id
@@ -91,17 +125,13 @@ components:
           $ref: "#/components/schemas/QueryID"
         description:
           type: string
+          example: "{\"domain\": \"test_domain_2\", \"my_key\": \"{{ my_filter }}\"}"
     QueryFilter:
       type: object
+      example: {"my_filter" : "2017"}
     QueryResult:
-      required:
-        - id
-        - result
-      properties:
-        id:
-          $ref: "#/components/schemas/QueryID"
-        result:
-          type: object
+      type: array
+      format: object
     Error:
       required:
         - code

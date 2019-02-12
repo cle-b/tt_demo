@@ -2,3 +2,4 @@ cson
 flask
 connexion[swagger-ui]
 pymodm
+jinja2

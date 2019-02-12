@@ -8,7 +8,7 @@ from pymodm import fields, MongoModel
 class Query(MongoModel):
     """TODO doc
     """
-    name = fields.CharField(primary_key=True)
+    id = fields.CharField(primary_key=True)
     description = fields.CharField(required=True)
 
     def __init__(self, description=None):
@@ -17,5 +17,5 @@ class Query(MongoModel):
         #       * query duplication
         desc = json.dumps(description, ensure_ascii=False)
         checksum = hashlib.md5(desc.encode("utf-8")).hexdigest()
-        super(Query, self).__init__(name=checksum,
+        super(Query, self).__init__(id=checksum,
                                     description=desc)
