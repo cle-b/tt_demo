@@ -3,8 +3,18 @@
     domain: "test_domain"
     my_key: "{{ my_filter }}"
 ]
-another:
+others:
   dict:
     query:
         abc: "demo"
         def: 13
+  aggregate:
+    query:[
+            $match:
+              domain:"test_domain"
+              View: "MONTH"
+              "Code Entité": $nin: ["A1", "A2", "A3"]
+          ,
+            $group:
+              _id: "$Libellé Entité"
+          ]

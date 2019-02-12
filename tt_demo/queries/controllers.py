@@ -1,34 +1,28 @@
 # -*- coding: utf-8 -*
-
 import json
 import hashlib
 
 import cson
-from pymongo import UpdateOne
+
+from .models import Query
 
 
 def search_and_replace_queries(config):
     """Search and replace all query descriptions by a key (its checksum) in the
-       configuration dictionary.
-
-        When a query description is found, we:
-            * stringify it
-            * calculate its checksum
-            * replace the description by its checksum
-            * return the pair (checksum, str_description)
+       configuration dictionary. It's a generator, only a query is replaced at each
+       call.
 
     Args:
         config: A configuration dictionary with query descriptions.
 
     Returns:
-        The pair (checksum, str_description)
+        A Query object (as an generator).
     """
     for k, v in config.items():
         if k == "query":
-            str_description = json.dumps(v, ensure_ascii=False)
-            checksum = hashlib.md5(str_description.encode("utf-8")).hexdigest()
-            config[k] = checksum
-            yield (checksum, str_description)
+            new_query = Query(v)
+            config[k] = new_query.name
+            yield new_query
         elif isinstance(v, dict):
             for result in search_and_replace_queries(v):
                 yield result
@@ -39,7 +33,7 @@ def search_and_replace_queries(config):
                         yield result
 
 
-def create_queries(cson_content, db):
+def create_queries(cson_content):
     """Create the queries from the CSON configuration file
 
     Args:
@@ -58,15 +52,35 @@ def create_queries(cson_content, db):
 
     queries = list(search_and_replace_queries(config))  # walks through config recursively
 
-    # insert all the queries using a bulk command for better performance.
-    # insert a query only if not exists
-    # using the checksum as key in order to avoid at least two problems:
-    #       * key collision
-    #       * query duplication
-    # in case of performance issue, change document like this
-    # {"name": checksum, "description": str_description} and an index for "name"
-    db.myqueries.bulk_write([UpdateOne({checksum: {"$exists": True}},
-                                       {"$set": {checksum: str_description}},
-                                       upsert=True) for (checksum, str_description) in queries])
+    # create or update all the queries using a bulk command for better performance.
+    # bulk_write with update is not available with pymodm (for insert or update)
+    # Therefore, we first retreive all existing query name in order to bulk_create
+    # only the new ones.
+    query_names = get_all_query_names()
+    new_queries = []
+    new_query_names = []
+    for query in queries:
+        if (query.name not in query_names) and (query.name not in new_query_names):
+            new_queries.append(query)
+            new_query_names.append(query.name)
+    if len(new_queries) > 0:
+        Query.objects.bulk_create([new_query for new_query in new_queries])
 
     return cson.dumps(config, indent=True, ensure_ascii=False)
+
+
+def get_all_query_names():
+    """Returns an array with all query IDs"""
+    return [query.name for query in list(Query.objects.only("name"))]
+
+
+def get_query_description(query_id):
+    """Get the description of the query query_id.
+
+    Returns the query description has a string.
+    """
+    try:
+        query = Query.objects.get({'_id': query_id})
+        return True, query.description
+    except Query.DoesNotExist:
+        return False, "This query does not exist"

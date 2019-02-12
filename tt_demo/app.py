@@ -2,7 +2,7 @@
 import os
 
 import connexion
-from flask_pymongo import PyMongo
+from pymodm import connect
 
 
 def create_app(app_name, mongodb_uri, port=9090, debug=False):    
@@ -18,17 +18,16 @@ def create_app(app_name, mongodb_uri, port=9090, debug=False):
 
     app.add_api('swagger-ttdemo.yaml')
 
-    app.app.config["MONGO_URI"] = mongodb_uri
-    app.app.mongo = PyMongo(app.app)
+    connect(mongodb_uri)
 
     return app
 
 
 if __name__ == '__main__':
     debug = os.getenv("FLASK_DEBUG", "0") == "1"
-    mongdb_uri = os.getenv("TT_MONGO_URI", "mongodb://localhost:27017/mytest")
+    mongodb_uri = os.getenv("TT_MONGO_URI", "mongodb://localhost:27017/mytest")
 
     app = create_app(__name__,
-                     mongodb_uri=mongdb_uri,
+                     mongodb_uri=mongodb_uri,
                      debug=debug)
     app.run()
