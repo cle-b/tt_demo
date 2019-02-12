@@ -33,8 +33,75 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+    get:
+      summary: List all queries
+      operationId: tt_demo.list_queries
+      tags:
+        - queries
+      responses:
+        '200':
+          description: An array of query ID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QueryID"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /query/{query_id}:
+    get:
+      summary: Get the query description
+      operationId: tt_demo.get_query
+      tags:
+        - queries
+      parameters:
+        - name: query_id
+          in: path
+          required: true
+          description: The id of the query to retreive
+          schema:
+            $ref: "#/components/schemas/QueryID"
+      responses:
+        '200':
+          description: The expected query
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Query"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
+    QueryID:
+      type: string
+      readOnly: true
+    Query:
+      required:
+        - id
+        - description
+      properties:
+        id:
+          $ref: "#/components/schemas/QueryID"
+        description:
+          type: string
+    QueryFilter:
+      type: object
+    QueryResult:
+      required:
+        - id
+        - result
+      properties:
+        id:
+          $ref: "#/components/schemas/QueryID"
+        result:
+          type: object
     Error:
       required:
         - code

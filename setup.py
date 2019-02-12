@@ -21,9 +21,10 @@ setuptools.setup(
     install_requires=["cson",
                       "flask",
                       "connexion[swagger-ui]",
-                      "flask_pymongo"],
+                      "pymodm"],
     classifiers=[
         "Programming Language :: Python :: 3",
         'License :: OSI Approved :: Apache Software License'
     ],
 )
+    
