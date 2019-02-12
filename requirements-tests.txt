@@ -7,3 +7,4 @@ connexion[swagger-ui]
 pep8
 codecov
 pymodm
+jinja2

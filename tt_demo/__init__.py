@@ -2,8 +2,11 @@
 
 from .app import create_app
 from .queries import create_queries_from_cson, list_queries, get_query
+from .mycollection import query
+
 
 __all__ = ["create_app",
            "create_queries_from_cson",
            "list_queries",
-           "get_query"]
+           "get_query",
+           "query"]

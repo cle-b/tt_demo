@@ -21,7 +21,7 @@ def search_and_replace_queries(config):
     for k, v in config.items():
         if k == "query":
             new_query = Query(v)
-            config[k] = new_query.name
+            config[k] = new_query.id
             yield new_query
         elif isinstance(v, dict):
             for result in search_and_replace_queries(v):
@@ -54,24 +54,24 @@ def create_queries(cson_content):
 
     # create or update all the queries using a bulk command for better performance.
     # bulk_write with update is not available with pymodm (for insert or update)
-    # Therefore, we first retreive all existing query name in order to bulk_create
+    # Therefore, we first retrieve all existing query id in order to bulk_create
     # only the new ones.
-    query_names = get_all_query_names()
+    query_ids = get_all_query_ids()
     new_queries = []
-    new_query_names = []
+    new_query_ids = []
     for query in queries:
-        if (query.name not in query_names) and (query.name not in new_query_names):
+        if (query.id not in query_ids) and (query.id not in new_query_ids):
             new_queries.append(query)
-            new_query_names.append(query.name)
+            new_query_ids.append(query.id)
     if len(new_queries) > 0:
         Query.objects.bulk_create([new_query for new_query in new_queries])
 
     return cson.dumps(config, indent=True, ensure_ascii=False)
 
 
-def get_all_query_names():
+def get_all_query_ids():
     """Returns an array with all query IDs"""
-    return [query.name for query in list(Query.objects.only("name"))]
+    return [query.id for query in list(Query.objects.only("id"))]
 
 
 def get_query_description(query_id):

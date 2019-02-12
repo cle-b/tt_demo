@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*
 from flask import Response, abort
 
-from .controllers import create_queries, get_all_query_names, get_query_description
+from .controllers import create_queries, get_all_query_ids, get_query_description
 
 
 def create_queries_from_cson(body):
@@ -22,9 +22,9 @@ def create_queries_from_cson(body):
 
 
 def list_queries():
-    """Returns an array with the name of all the queries already recorded in the database.
+    """Returns an array with the ID of all the queries already recorded in the database.
     """
-    return get_all_query_names()
+    return get_all_query_ids()
 
 
 def get_query(query_id):
