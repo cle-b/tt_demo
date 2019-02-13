@@ -125,10 +125,10 @@ components:
           $ref: "#/components/schemas/QueryID"
         description:
           type: string
-          example: "{\"domain\": \"test_domain_2\", \"my_key\": \"{{ my_filter }}\"}"
+          example: '{"domain": "test_domain_2", "my_key": "{{filter}}"}'
     QueryFilter:
       type: object
-      example: {"my_filter" : "2017"}
+      example: {"filter" : "2017"}
     QueryResult:
       type: array
       format: object
