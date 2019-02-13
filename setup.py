@@ -11,7 +11,7 @@ setuptools.setup(
     version="0.0.1",
     author="cle-b",
     author_email="cle@tictac.pm",
-    description="My implementation of the Toucan Toco back test for technical interview.",
+    description="My implementation of the Toucan Toco back  tech test for technical interview.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/cle-b/tt_demo",

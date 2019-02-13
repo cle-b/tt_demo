@@ -1,0 +1,18 @@
+﻿query1:
+  query:
+    domain: "test_domain_2"
+    my_key: "2017"
+query2:
+  query:
+    domain: "test_domain_2"
+    my_key: "{{filter}}"
+aggregate:
+  query:[  
+    $match:
+      domain:"test_domain_2"
+    ,  
+    $group:
+      _id: "$my_key"
+      my_key: 
+          $sum: 1
+]
