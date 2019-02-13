@@ -10,7 +10,15 @@ from ..queries.controllers import get_query_description
 
 
 def query(id, body):
+    """Execute a query on mycoll collection
 
+      Args:
+        id: the query ID
+        body: the filter
+
+    Returns:
+        An array of document.
+    """
     # get the query description
     success, description = get_query_description(id)
     if not success:
