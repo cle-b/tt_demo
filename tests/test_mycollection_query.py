@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*
-# TODO add tests for aggregate query and malformed requests
 
 
 def test_query_one_document_without_filter(client):
@@ -77,19 +76,24 @@ def test_query_empty_document_with_filter(client):
 
 
 def test_query_aggregate(client):
-    #   query:
-    #     domain: "test_domain_2"
-    #     my_key: "{{filter}}"
+    # query:[  
+    #     $match:
+    #       domain:"test_domain_2"
+    #     ,  
+    #     $group:
+    #       _id: "$my_key"
+    #       my_key: 
+    #           $sum: 1
 
-    res = client.post("/mycoll/query?id=66afee1fd2f6fb5d266a5944ae18e586",
+    res = client.post("/mycoll/query?id=89da2cbd2e566a77b0e96ebf06c26daf",
                       json={})
 
     # request returns an HTTP 200
     assert res.status_code == 200
 
-    # there is no document
+    # there are 4 documents
     documents = res.json
-    assert len(documents) == 0
+    assert len(documents) == 4
 
 
 def test_query_unknown_id(client):
