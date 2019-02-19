@@ -9,7 +9,6 @@ def execute_query_find(query):
     """
     documents = []
     for document in list(pymodm.connection._get_db().mycoll.find(query)):
-        document.pop("_id")
         documents.append(document)
     return documents
 
@@ -21,6 +20,5 @@ def execute_query_aggregate(query):
     """
     documents = []
     for document in list(pymodm.connection._get_db().mycoll.aggregate(query)):
-        document.pop("_id")
         documents.append(document)
     return documents

@@ -76,13 +76,13 @@ def test_query_empty_document_with_filter(client):
 
 
 def test_query_aggregate(client):
-    # query:[  
+    # query:[
     #     $match:
     #       domain:"test_domain_2"
-    #     ,  
+    #     ,
     #     $group:
     #       _id: "$my_key"
-    #       my_key: 
+    #       my_key:
     #           $sum: 1
 
     res = client.post("/mycoll/query?id=89da2cbd2e566a77b0e96ebf06c26daf",
@@ -94,6 +94,13 @@ def test_query_aggregate(client):
     # there are 4 documents
     documents = res.json
     assert len(documents) == 4
+
+    # check aggregate result
+    for document in documents:
+        if document["_id"] in ("2017", "2018", "2019"):
+            assert document["my_key"] == 1
+        elif document["_id"] == "2020":
+            assert document["my_key"] == 2
 
 
 def test_query_unknown_id(client):
