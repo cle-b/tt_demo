@@ -1,12 +1,21 @@
 # -*- coding: utf-8 -*
 import json
 
+from bson import ObjectId
 from flask import abort
 import jinja2
 import pymodm
 
 from .controllers import execute_query_find, execute_query_aggregate
 from ..queries.controllers import get_query_description
+
+
+class JSONEncoderRemoveObjectId(json.JSONEncoder):
+    """Replace the BSON ObjectId by a string during the JSON serialization"""
+    def default(self, o):
+        if isinstance(o, ObjectId):
+            return str(o)
+        return json.JSONEncoder.default(self, o)
 
 
 def query(id, body):
@@ -39,7 +48,10 @@ def query(id, body):
     elif isinstance(prepared_query, list):
         results = execute_query_aggregate(prepared_query)
     else:
-        abort(400)
+        abort(400)    
+
+    # quick fix in order to replace the ObjectId by a string 
+    results = json.loads(json.dumps(results, cls=JSONEncoderRemoveObjectId))
 
     # return a list of documents (can be empty)
     return results
